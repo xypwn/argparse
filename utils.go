@@ -3,23 +3,15 @@ package argparse
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"strconv"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 func decideTerminalWidth() int {
-	// decide terminal width
-	cmd := exec.Command("stty", "size")
-	cmd.Stdin = os.Stdin // this is important
-	result, e := cmd.Output()
-	if e != nil {
-		result = []byte("0 80")
-	}
-	width := 80
-	parse := strings.Split(strings.TrimRight(string(result), "\n"), " ")
-	if w, e := strconv.Atoi(parse[1]); e == nil {
-		width = w
+	width, _, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		return 80
 	}
 	return width
 }
