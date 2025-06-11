@@ -24,6 +24,14 @@ func formatHelpRow(head, content string, bareHeadLength, maxHeadLength, terminal
 	// length of a single content row, constant
 	contentRowLen := terminalWidth - maxHeadLength
 
+	min := func(x, y int) int {
+		if x < y {
+			return x
+		} else {
+			return y
+		}
+	}
+
 	var rows []string
 	if withBreak && maxHeadLength < bareHeadLength {
 		rows = append(rows, head)
