@@ -25,12 +25,15 @@ func formatHelpRow(head, content string, bareHeadLength, maxHeadLength, terminal
 	contentRowLen := terminalWidth - maxHeadLength
 
 	var rows []string
-	if withBreak {
+	if withBreak && maxHeadLength < bareHeadLength {
 		rows = append(rows, head)
 	} else {
 		// no break -> head is on the same row
 		// as first content line
-		headRowPadding := strings.Repeat(" ", maxHeadLength-bareHeadLength)
+		var headRowPadding string
+		if maxHeadLength > bareHeadLength {
+			headRowPadding = strings.Repeat(" ", maxHeadLength-bareHeadLength)
+		}
 		rowLen := min(contentRowLen, len(content))
 		rows = append(rows, head+headRowPadding+content[:rowLen])
 		content = content[rowLen:]
